@@ -38,7 +38,7 @@
               <dd>内购价：￥<span style="color:red;">{{item.product_token_price}}</span></dd>
             </dl>
           </div>
-          <img class="lazy-img"  :onerror="defaultImg" :src="item.product_img_url">
+          <img class="lazy-img" :onerror="defaultImg" :src="item.product_img_url">
         </li>
       </ul>
     </div>
@@ -50,7 +50,8 @@
   </div>
 </template>
 <script>
-  const img = require('../assets/logo.png')
+  import {MessageBox} from 'mint-ui';
+
   export default {
     name: 'HelloWorld',
     computed: {
@@ -60,9 +61,8 @@
     },
     data() {
       return {
-        errorImg01: 'this.src="' + img + '"',
         count: 0,
-        nowPage: 1,
+        nowPage: 0,
         loading: false,
         category: [],
         selectCategory: "",
@@ -81,6 +81,7 @@
         this.axios.get(`${this.baseUrl}/api/category`)
           .then(function (response) {
             _this.category = response.data.data
+            _this.selectCategory = response.data.data[0].product_category
             _this.getProducts(response.data.data[0].product_category, _this.nowPage);
           })
           .catch(function (error) {
@@ -103,7 +104,6 @@
               _this.products = _this.products.concat(response.data.data)
             }
             _this.loading = false;
-            console.log(response);
           })
           .catch(function (error) {
             console.log(error);
@@ -118,9 +118,19 @@
       loadMore() {
         this.loading = true;
         this.nowPage++;
-        if ((this.nowPage - 1) * 10 < this.count) {
+
+        if ((this.nowPage - 1) * 10 < this.count && this.count > 0) {
           this.getProducts(this.selectCategory, this.nowPage, 2)
+        } else {
+          if (this.count > 0 && (this.nowPage - 1) * 10 > this.count) {
+            MessageBox({
+              title: '提示',
+              message: '已经到底，没有更多了',
+              showCancelButton: true
+            });
+          }
         }
+
       }
     }
 

@@ -82,7 +82,7 @@ async function getClassify(page, index) {
 }
 
 // "热水器",
-const categoryList = ["冰柜", "冰箱", "空调", "电视", "燃气灶", "消毒柜", "洗碗机", "洗衣机"]
+const categoryList = ["冰柜", "冰箱", "空调", "电视", "燃气灶","热水器", "消毒柜", "洗碗机", "洗衣机"]
 
 async function run() {
     const len = categoryList.length;
@@ -101,5 +101,5 @@ function clearFn(){
 }
 
 
-clearFn();
+// clearFn();
 getClassify(1, 0)
