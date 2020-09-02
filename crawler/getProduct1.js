@@ -42,7 +42,7 @@ async function getClassify(page, index) {
                         let product_name = dd.eq(i).find(".jq22-list-theme-subtitle").text().trim()
                         let priduct_url = host + dd.eq(i).attr("href")
 
-                        await sleep(200);
+                        await sleep(80);
 
                         request.get(priduct_url)
                             .end(async (err, res) => {

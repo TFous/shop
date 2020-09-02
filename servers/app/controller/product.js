@@ -6,8 +6,10 @@ class ProductController extends Controller {
     async show() {
         const { ctx, service } = this;
         const category  = ctx.params.category;
+        let pageNumber = ctx.params.page;
         let response = {success: false, message: "操作失败"};
-        const data = await service.product.get(category);
+        console.log(pageNumber)
+        const data = await service.product.get(category,pageNumber);
         const totalCount = await service.product.getCount(category);
         response.message = "操作成功";
         response.success = true;

@@ -47,7 +47,19 @@ module.exports = appInfo => {
   const userConfig = {
     // myAppName: 'egg',
   };
-
+  config.CORS  = {
+    // origin: 'localhost:8080',
+    origin: '*',
+    credentials:true,
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH'
+  }
+  config.security = {
+    csrf: {
+      enable: false,
+      // headerName: 'x-csrf-token', // 通过 header 传递 CSRF token 的默认字段为 x-csrf-token
+    },
+    domainWhiteList: [ 'http://localhost:8080','http://localhost:8081','http://tenggg.win:7001']
+  };
   return {
     ...config,
     ...userConfig,

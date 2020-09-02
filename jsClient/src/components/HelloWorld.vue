@@ -18,8 +18,8 @@
 
     <div>
       <ul class="category-ul">
-        <li v-for="itme in category" class="category-item"><mt-button style="width:90%;  font-size: 13px;
-" type="primary">{{itme}}</mt-button></li>
+        <li v-for="itme in category" class="category-item" @click="getProducts(itme.product_category)">
+          <mt-button style="width:90%;  font-size: 13px;" type="primary">{{itme.product_category}}</mt-button></li>
       </ul>
     </div>
 
@@ -29,15 +29,15 @@
         v-infinite-scroll="loadMore"
         infinite-scroll-disabled="loading"
         infinite-scroll-distance="10">
-        <li class="pro-item" v-for="item in list2">
+        <li class="pro-item" v-for="item in products" @click="goDetailPage(item.product_rebate_url)">
           <div class="pro-msg">
-            <h2 class="pro-name">华帝（VATTI）i11149+52B+13030 油烟机 侧吸式抽油烟机燃气灶具消毒柜厨房三件套 19瞬吸大吸力(天然气)</h2>
+            <h2 class="pro-name">{{item.product_name}}</h2>
             <dl>
-              <dd>京东价：￥<span style="text-decoration:line-through;color:#666;">1111</span></dd>
-              <dd>内购价：￥<span style="color:red;">8888</span></dd>
+              <dd>京东价：￥<span style="text-decoration:line-through;color:#666;">{{item.product_jd_price}}</span></dd>
+              <dd>内购价：￥<span style="color:red;">{{item.product_token_price}}</span></dd>
             </dl>
           </div>
-          <img class="lazy-img"  v-lazy.container="item">
+          <img class="lazy-img"  v-lazy.container="item.product_img_url">
         </li>
       </ul>
     </div>
@@ -48,38 +48,72 @@
     </div>
   </div>
 </template>
-
 <script>
   export default {
     name: 'HelloWorld',
     data() {
       return {
-        category: ["燃气灶", "燃气灶", "燃气灶", "燃气灶", "燃气灶","燃气灶","燃气灶","燃气灶",9,0],
-        list: ["燃气灶", "燃气灶", "燃气灶", "燃气灶", "燃气灶","燃气灶","燃气灶","燃气灶",9,0],
-        list2: ["http://fuss10.elemecdn.com/1/c5/95c37272d3e554317dcec1e17a9f5jpeg.jpeg",
-          "http://fuss10.elemecdn.com/1/c5/95c37272d3e554317dcec1e17a9f5jpeg.jpeg",
-          "http://fuss10.elemecdn.com/1/c5/95c37272d3e554317dcec1e17a9f5jpeg.jpeg",
-          "http://fuss10.elemecdn.com/1/c5/95c37272d3e554317dcec1e17a9f5jpeg.jpeg",
-          "http://fuss10.elemecdn.com/1/c5/95c37272d3e554317dcec1e17a9f5jpeg.jpeg",
-        ],
+        count: 0,
+        nowPage: 1,
+        loading: false,
+        category: [],
+        selectCategory: "",
+        products:[],
         msg: 'Welcome to Your Vue.js App',
         searchValue: ''
       }
     },
-    create: function () {
+    created: function () {
+      this.getCategorys();
     },
     mounted: function () {
     },
     methods: {
+      getCategorys(){
+        const _this = this;
+        this.axios.get(`${this.baseUrl}/api/category`)
+          .then(function (response) {
+            _this.category = response.data.data
+            _this.selectCategory = response.data.data[0].product_category
+            _this.getProducts(response.data.data[0].product_category,_this.nowPage);
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+          .then(function () {
+            // always executed
+          });
+      },
+      getProducts(category,page = 1,type=1){
+        const _this = this;
+        this.axios.get(`${this.baseUrl}/api/getCategoryPro/${category}/${page}`)
+          .then(function (response) {
+            if(type===1){
+              _this.products = response.data.data
+              _this.count = response.data.count
+            }
+            if(type===2){
+              _this.products = _this.products.concat(response.data.data)
+            }
+            _this.loading = false;
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+          .then(function () {
+            // always executed
+          });
+      },
+      goDetailPage(href){
+        location.href = href;
+      },
       loadMore() {
         this.loading = true;
-        setTimeout(() => {
-          let last = this.list2[this.list2.length - 1];
-          for (let i = 1; i <= 10; i++) {
-            this.list2.push(last);
-          }
-          this.loading = false;
-        }, 2500);
+        this.nowPage++;
+        if((this.nowPage-1)*10<this.count){
+          this.getProducts(this.selectCategory,this.nowPage,2)
+        }
       }
     }
 
