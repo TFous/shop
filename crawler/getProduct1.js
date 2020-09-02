@@ -9,7 +9,15 @@ require('superagent-charset')(request)
 
 const host = "http://535.shop.hnslxd.com"
 
-async function getClassify(page,index) {
+function sleep(time = 0) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve();
+        }, time);
+    })
+};
+
+async function getClassify(page, index) {
     var category = categoryList[index]
     let url = "http://535.shop.hnslxd.com/api/page_new?page=" + page + "&search=" + category + "&sortname=insert_time&sortorder=desc";
     console.log(url)
@@ -22,7 +30,7 @@ async function getClassify(page,index) {
                 }
                 var $ = cheerio.load(res.text);
                 let dd = $(".jq22-list-item")
-                if(dd.text().length>0){
+                if (dd.text().length > 0) {
                     let len = dd.length;
                     for (var i = 0; i < len; i++) {
                         let msg = dd.eq(i).find(".jq22-flex-box")
@@ -34,8 +42,9 @@ async function getClassify(page,index) {
                         let product_name = dd.eq(i).find(".jq22-list-theme-subtitle").text().trim()
                         let priduct_url = host + dd.eq(i).attr("href")
 
+                        await sleep(200);
 
-                       request.get(priduct_url)
+                        request.get(priduct_url)
                             .end(async (err, res) => {
                                 if (err) {
                                     return next(err);
@@ -44,11 +53,12 @@ async function getClassify(page,index) {
                                 let dd = $(".desc-short")
                                 let product_rebate_url = dd.find(".button").eq(1).attr("href")
                                 let sql = `INSERT INTO product(product_jd_price,product_rebate_url,sku_id,product_name,product_token_price,product_img_url,category) SELECT ?,?,?,?,?,?,? FROM DUAL WHERE NOT EXISTS(SELECT sku_id FROM product WHERE sku_id = ?)`
-                                let parameter = [product_jd_price,
+                                let parameter = [
+                                    Number(product_jd_price),
                                     product_rebate_url,
                                     sku_id,
                                     product_name,
-                                    product_token_price,
+                                    Number(product_token_price),
                                     product_img_url,
                                     category,
                                     sku_id]
@@ -60,9 +70,9 @@ async function getClassify(page,index) {
                     if (len > 0) {
                         await getClassify(page + 1, index)
                     }
-                }else {
-                    var _index = index+1
-                    if(_index<=categoryList.length-1){
+                } else {
+                    var _index = index + 1
+                    if (_index <= categoryList.length - 1) {
                         await getClassify(1, _index)
                     }
                 }
@@ -81,4 +91,15 @@ async function run() {
     }
 }
 
+function clearFn(){
+    let clearTable = "truncate table product"
+    mysql.EXECUTE(clearTable,[],(err,result) => {
+        if(err) throw err;
+        console.log("删除成功");
+    })
+
+}
+
+
+clearFn();
 getClassify(1, 0)
