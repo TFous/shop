@@ -78,8 +78,14 @@
     mounted: function () {
     },
     methods: {
-      searchFn(){
-        this.$router.push({ name: 'search', params: { name: this.searchValue }})
+      searchFn() {
+        this.$router.push({
+          name: 'search', params:
+            {
+              name: this.searchValue,
+              select: this.select
+            }
+        })
       },
       getCategorys() {
         const _this = this;

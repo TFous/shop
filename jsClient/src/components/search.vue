@@ -54,10 +54,13 @@
       }
     },
     created: function () {
+      this.selectCategory = this.$route.params.select
       this.searchValue = this.$route.params.name
       this.getCategorys();
+
     },
     mounted: function () {
+
     },
     methods: {
       goBack(){
@@ -68,8 +71,7 @@
         this.axios.get(`${this.baseUrl}/api/category`)
           .then(function (response) {
             _this.category = response.data.data
-            _this.selectCategory = response.data.data[9].product_category
-            _this.getProducts(response.data.data[9].product_category,_this.searchValue, _this.nowPage);
+            _this.getProducts(_this.selectCategory,_this.searchValue, _this.nowPage);
           })
           .catch(function (error) {
             console.log(error);
