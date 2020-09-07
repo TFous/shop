@@ -14,6 +14,13 @@ Vue.use(Mint);
 Vue.prototype.axios = axios;
 Vue.prototype.baseUrl = "http://127.0.0.1:7001";
 
+import 'element-ui/lib/theme-chalk/index.css';
+import { Input, Select,Option,Button } from 'element-ui';
+Vue.use(Input);
+Vue.use(Select);
+Vue.use(Option);
+Vue.use(Button);
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

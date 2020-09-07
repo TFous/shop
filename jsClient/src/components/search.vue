@@ -1,38 +1,24 @@
 <template>
   <div class="page-wrap">
-    <mt-header title="京东乐购"></mt-header>
+    <mt-header title="搜索页">
+      <mt-button @click="goBack" icon="back" slot="left"></mt-button>
+    </mt-header>
+
     <div class="mint-searchbar1">
       <el-input placeholder="请输入内容" v-model="searchValue" class="input-with-select">
-        <el-select v-model="select" slot="prepend" placeholder="请选择" style="width:96px;">
+        <el-select v-model="selectCategory" slot="prepend" placeholder="请选择" style="width:96px;">
           <el-option v-for="itme in category" :label="itme.product_category" :value="itme.product_category" :key="itme.product_category"></el-option>
         </el-select>
-        <el-button slot="append" icon="el-icon-search" @click="searchFn"></el-button>
+        <el-button slot="append" icon="el-icon-search" @click="getProducts(selectCategory,searchValue)"></el-button>
       </el-input>
     </div>
-    <div class="page-swipe">
-      <mt-swipe :auto="0">
-        <mt-swipe-item class="slide1">1</mt-swipe-item>
-        <mt-swipe-item class="slide2">2</mt-swipe-item>
-        <mt-swipe-item class="slide3">3</mt-swipe-item>
-      </mt-swipe>
-    </div>
-
-
-    <div>
-      <ul class="category-ul">
-        <li v-for="itme in category" class="category-item" @click="getProducts(itme.product_category)">
-          <mt-button style="width:90%;  font-size: 13px;" type="primary">{{itme.product_category}}</mt-button>
-        </li>
-      </ul>
-    </div>
-
     <div class="pro-wrap">
       <ul
         class="pro-ul"
         v-infinite-scroll="loadMore"
         infinite-scroll-disabled="loading"
         infinite-scroll-distance="10">
-        <li class="pro-item" v-for="item in products"  @click="goDetailPage(item.product_rebate_url)">
+        <li class="pro-item" v-for="item in products" @click="goDetailPage(item.product_rebate_url)">
           <div class="pro-msg">
             <h2 class="pro-name">{{item.product_name}}</h2>
             <dl>
@@ -44,15 +30,11 @@
         </li>
       </ul>
     </div>
-
-
-    <div class="footer">
-      注意事项：
-    </div>
   </div>
 </template>
 <script>
   import {MessageBox} from 'mint-ui';
+
   export default {
     name: 'HelloWorld',
     computed: {
@@ -62,32 +44,32 @@
     },
     data() {
       return {
-        select: '所有',
         count: 0,
         nowPage: 0,
         loading: false,
         category: [],
-        selectCategory: "",
+        selectCategory: "所有",
         products: [],
         searchValue: ''
       }
     },
     created: function () {
+      this.searchValue = this.$route.params.name
       this.getCategorys();
     },
     mounted: function () {
     },
     methods: {
-      searchFn(){
-        this.$router.push({ name: 'search', params: { name: this.searchValue }})
+      goBack(){
+        window.history.back();
       },
       getCategorys() {
         const _this = this;
         this.axios.get(`${this.baseUrl}/api/category`)
           .then(function (response) {
             _this.category = response.data.data
-            _this.selectCategory = response.data.data[0].product_category
-            _this.getProducts(response.data.data[0].product_category, _this.nowPage);
+            _this.selectCategory = response.data.data[9].product_category
+            _this.getProducts(response.data.data[9].product_category,this.searchValue, _this.nowPage);
           })
           .catch(function (error) {
             console.log(error);
@@ -96,10 +78,10 @@
             // always executed
           });
       },
-      getProducts(category, page = 1, type = 1) {
+      getProducts(category,name, page = 1, type = 1) {
         const _this = this;
         this.selectCategory = category
-        this.axios.get(`${this.baseUrl}/api/getCategoryPro/${category}/${page}`)
+        this.axios.get(`${this.baseUrl}/api/query/${category}/${name}/${page}`)
           .then(function (response) {
             if (type === 1) {
               _this.products = response.data.data
@@ -123,15 +105,16 @@
       loadMore() {
         this.loading = true;
         this.nowPage++;
+
         if ((this.nowPage - 1) * 10 < this.count && this.count > 0) {
-          this.getProducts(this.selectCategory, this.nowPage, 2)
+          this.getProducts(this.selectCategory, this.searchValue,this.nowPage, 2)
         } else {
           if (this.count > 0 && (this.nowPage - 1) * 10 > this.count) {
-            MessageBox({
-              title: '提示',
-              message: '已经到底，没有更多了',
-              showCancelButton: true
-            });
+            // MessageBox({
+            //   title: '提示',
+            //   message: '已经到底，没有更多了',
+            //   showCancelButton: true
+            // });
           }
         }
 
@@ -178,7 +161,7 @@
 
   .pro-msg {
     padding: 6px 2px;
-    width: 180px;
+    width: 176px;
     float: right;
   }
 
