@@ -69,7 +69,7 @@
           .then(function (response) {
             _this.category = response.data.data
             _this.selectCategory = response.data.data[9].product_category
-            _this.getProducts(response.data.data[9].product_category,this.searchValue, _this.nowPage);
+            _this.getProducts(response.data.data[9].product_category,_this.searchValue, _this.nowPage);
           })
           .catch(function (error) {
             console.log(error);

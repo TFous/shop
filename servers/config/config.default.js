@@ -58,7 +58,7 @@ module.exports = appInfo => {
       enable: false,
       // headerName: 'x-csrf-token', // 通过 header 传递 CSRF token 的默认字段为 x-csrf-token
     },
-    domainWhiteList: [ 'http://localhost:8080','http://localhost:8081','http://tenggg.win:7001']
+    domainWhiteList: [ 'http://localhost:8080','http://localhost:8081','http://73154d94bf9e.ngrok.io']
   };
   return {
     ...config,
