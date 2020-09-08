@@ -17,14 +17,6 @@ module.exports = appInfo => {
 
   // add your middleware config here
   config.middleware = [];
-  config.sequelize = {
-    dialect: 'mysql', // support: mysql, mariadb, postgres, mssql
-    database: 'test_db',
-    host: 'localhost',
-    port: 3306,
-    username: 'root',
-    password: '123456',
-  };
   config.mysql = {
     client: {
       // host
