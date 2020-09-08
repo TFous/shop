@@ -3,26 +3,30 @@
     <div @click="showPop">
       <el-alert
         title="关于购买须知"
-        type="info"></el-alert>
+        type="warning"></el-alert>
     </div>
 
     <mt-popup
       style="width:80%;"
       v-model="popupVisible"
       popup-transition="popup-fade">
-      <div style="padding:10px 20px;">
+      <div  class="tipcont" style="padding:10px 20px;">
         <h3 style="text-align: center;margin-bottom: 4px;">购买须知</h3>
         <h4>关于商品</h4>
         <p>1、所有商品都是京东官方自营商品，保证全新正品。</p>
         <h4>关于物流</h4>
-        <p>1、物流和在京东下单走的是同一个物流。</p>
+        <p>1、物流和在京东下单是同一个物流。</p>
         <h4>关于购买</h4>
-        <p>1、因为渠道特殊，在京东官方是无法买到这么优惠价格的物品，只能走咸鱼或者微信小店。</p>
+        <p>1、因为渠道特殊，在京东官方是无法买到这么优惠价格的物品，所以只能咸鱼或者微信小店下单购买。</p>
         <h4>关于售后</h4>
         <p>1、商品可以申请发票，但发票金额只有一分钱，为提供售后保障（微利润，不可能提供全款发票，如需要可加钱）。</p>
         <p>2、可以找商品的全国联保地点。</p>
         <p>3、可以联系我们，我们为您找京东来解决售后为题。</p>
-        <p style="color:red">注：商品一旦售出，如不是商品自身质量原因，不支持无理由免费退换，微利销售，请谅解。</p>
+        <h4>重要提示</h4>
+        <p style="color:red">1、因为是内部优惠系统下单,所以不支持7天无理由退换货！</p>
+        <p style="color:red">2、大家电请先量好尺寸考虑清楚再下单。</p>
+        <p style="color:red">3、到货有任何质量问题可售后、可换货。需要安装的商品请等安装师傅上门再开包装，不需要安装的请当送货员开包装查验外形是否完整。</p>
+        <p style="color:red">4、下单商品出库后反悔退换、拒收扣商品价格商品价格10%，最低100元，最高300元</p>
       </div>
     </mt-popup>
   </div>
@@ -59,4 +63,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .tipcont h4{
+    margin:4px 0px 2px 0px;
+  }
 </style>
