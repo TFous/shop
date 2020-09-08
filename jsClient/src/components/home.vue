@@ -84,7 +84,6 @@
     },
     methods: {
       searchFn(e) {
-        alert(e.keyCode)
         this.$router.push({
           name: 'search', params:
             {
