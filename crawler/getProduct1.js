@@ -100,6 +100,40 @@ function clearFn(){
 
 }
 
+/**
+ * 每分钟的第30秒触发： '30 * * * * *'
 
-// clearFn();
+ 每小时的1分30秒触发 ：'30 1 * * * *'
+
+ 每天的凌晨1点1分30秒触发 ：'30 1 1 * * *'
+
+ 每月的1日1点1分30秒触发 ：'30 1 1 1 * *'
+
+ 2016年的1月1日1点1分30秒触发 ：'30 1 1 1 2016 *'
+
+ 每周1的1点1分30秒触发 ：'30 1 1 * * 1'
+ *
+ *
+ */
+const schedule = require('node-schedule');
+
+const  scheduleCronstyle = ()=>{
+    schedule.scheduleJob('30 1 3 * * *',()=>{
+        console.log('scheduleCronstyle:' + new Date());
+        clearFn();
+        getClassify(1, 0)
+    });
+}
+
+const  scheduleCronstyle2 = ()=>{
+    schedule.scheduleJob('30 30 3 * * *',()=>{
+        console.log('scheduleCronstyle2:' + new Date());
+        getClassify(1, 0)
+    });
+}
+
+clearFn();
 getClassify(1, 0)
+scheduleCronstyle();
+scheduleCronstyle2();
+
