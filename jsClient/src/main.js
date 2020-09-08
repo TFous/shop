@@ -12,7 +12,7 @@ import Mint from 'mint-ui';
 import 'mint-ui/lib/style.css'
 Vue.use(Mint);
 Vue.prototype.axios = axios;
-Vue.prototype.baseUrl = "http://3606ecd27656.ngrok.io";
+Vue.prototype.baseUrl = "http://be628bda554a.ngrok.io";
 
 import 'element-ui/lib/theme-chalk/index.css';
 import { Input, Select,Option,Button } from 'element-ui';

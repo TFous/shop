@@ -6,7 +6,7 @@ class ProductService extends Service {
         let data;
         if(category==="所有"){
             data = await this.app.mysql.select('product', {
-                orders: [['product_token_price', order]],
+                // orders: [['product_token_price', order]],
                 limit: pageSize, // 返回数据量
                 offset: (pageNumber - 1) * pageSize, // 数据偏移量
             });
@@ -15,8 +15,7 @@ class ProductService extends Service {
                 where: {
                     category: [category], // 相当于 in
                 },
-                like:{product_name:['%容声(Ronshen)%']},
-                orders: [['product_token_price', order]],
+                // orders: [['product_token_price', order]],
                 limit: pageSize, // 返回数据量
                 offset: (pageNumber - 1) * pageSize, // 数据偏移量
             });
