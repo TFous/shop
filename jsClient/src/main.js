@@ -15,11 +15,12 @@ Vue.prototype.axios = axios;
 Vue.prototype.baseUrl = "http://be628bda554a.ngrok.io";
 
 import 'element-ui/lib/theme-chalk/index.css';
-import { Input, Select,Option,Button } from 'element-ui';
+import { Input, Select,Option,Button,Alert } from 'element-ui';
 Vue.use(Input);
 Vue.use(Select);
 Vue.use(Option);
 Vue.use(Button);
+Vue.use(Alert);
 
 /* eslint-disable no-new */
 new Vue({
