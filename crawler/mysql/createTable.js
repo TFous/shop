@@ -14,4 +14,5 @@ function creat(sql){
 }
 
 
-creat(clearTable)
+creat(sql1)
+creat(sql2)
